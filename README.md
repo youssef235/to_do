@@ -1,4 +1,4 @@
-To-Do App
+**To-Do App**
 This is a To-Do application built using Flutter that allows users to manage their tasks effectively. The app includes several features such as authentication, task management, QR scanning, and camera integration. Below are the key features and functionalities.
 
 Features
