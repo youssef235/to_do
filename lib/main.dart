@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:provider/provider.dart';
 import 'Featurees/auth/cubit/auth_cubit.dart';
 import 'Featurees/todos/cubit/todo_cubit.dart';

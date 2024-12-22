@@ -5,7 +5,6 @@ import 'package:to_do/Featurees/todos/repositories/todo_repository_interface.dar
 import 'package:to_do/core/network/endpoints.dart';
 import '../services/api_todo_services.dart';
 
-
 class TodoRepository implements TodoRepositoryInterface {
   final ApiTodoServices apiService;
 
@@ -30,8 +29,10 @@ class TodoRepository implements TodoRepositoryInterface {
         file: imageFile,
         token: token,
       );
+      print("Image upload successful: $result");
       return result['image'] as String;
     } catch (e) {
+      print("Error uploading image: $e");
       throw Exception('Failed to upload image: $e');
     }
   }
@@ -42,11 +43,9 @@ class TodoRepository implements TodoRepositoryInterface {
     if (desc != null) data['desc'] = desc;
     if (status != null) data['status'] = status;
     if (priority != null) data['priority'] = priority;
-    // if (title != null) data['dueDate'] = title;
 
     await apiService.editTask(taskId, data: data);
   }
-
 
   Future<void> deleteTask(String taskId) async {
     await apiService.deleteTask(taskId);

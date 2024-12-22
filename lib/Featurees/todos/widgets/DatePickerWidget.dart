@@ -28,7 +28,7 @@ class DatePickerWidget extends StatelessWidget {
                   : '${selectedDate!.year}-${selectedDate!.month.toString().padLeft(2, '0')}-${selectedDate!.day.toString().padLeft(2, '0')}',
               style: const TextStyle(color: Colors.black),
             ),
-            Icon(Icons.calendar_today, color: AppColors.primaryColor), // تغيير لون الأيقونة
+            Icon(Icons.calendar_today, color: AppColors.primaryColor),
           ],
         ),
       ),

@@ -9,8 +9,8 @@ class Endpoints {
   static const String createtodo = "$baseUrl/todos";
   static const String uploadimage = "$baseUrl/upload/image";
   static const String getodos = "$baseUrl/todos?page=1";
-  static  String editodo(String todoid) => "$baseUrl/todos/$todoid"; //put
-  static  String deltodo(String todoid) => "$baseUrl/todos/$todoid"; //Del
+  static  String editodo(String todoid) => "$baseUrl/todos/$todoid";
+  static  String deltodo(String todoid) => "$baseUrl/todos/$todoid";
   static  String getodo(String todoid) => "$baseUrl/todos/$todoid";
 
 

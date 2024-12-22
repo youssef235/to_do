@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:to_do/constants/routes.dart';
 import '../cubit/todo_cubit.dart';
 import '../models/todo_model.dart';
 import '../widgets/AddTaskButton.dart';
@@ -28,13 +29,12 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
 
   File? _imageFile;
 
-
   Future<void> _pickImage(BuildContext context) async {
     final ImagePicker picker = ImagePicker();
     final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
     String? token = await _storage.read(key: 'accessToken');
-    print(token);
-    if (pickedFile != null) {
+    print("Token: $token");
+    if (pickedFile != null && mounted) {
       setState(() {
         _imageFile = File(pickedFile.path);
       });
@@ -73,7 +73,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
               const SizedBox(height: 20),
               DropdownInputWidget(
                 value: selectedPriority,
-                items: const[
+                items: [
                   {'text': 'High Priority', 'value': 'high', 'icon': Icons.flag_outlined},
                   {'text': 'Medium Priority', 'value': 'medium', 'icon': Icons.flag_outlined},
                   {'text': 'Low Priority', 'value': 'low', 'icon': Icons.flag_outlined},
@@ -89,7 +89,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
               const SizedBox(height: 20),
               DropdownInputWidget(
                 value: selectedStatus,
-                items: const [
+                items: [
                   {'text': 'In Progress', 'value': 'inprogress', 'icon': Icons.hourglass_empty},
                   {'text': 'Waiting', 'value': 'waiting', 'icon': Icons.access_time},
                   {'text': 'Finished', 'value': 'finished', 'icon': Icons.check_circle},
@@ -102,6 +102,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
                 },
                 label: 'Status',
               ),
+
               const SizedBox(height: 20),
               const Text('Due date', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               const SizedBox(height: 5),
@@ -121,24 +122,32 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
               const SizedBox(height: 30),
               AddTaskButton(onPressed: () async {
                 String? token = await _storage.read(key: 'accessToken');
+                if (token != null && titleController.text.isNotEmpty && descriptionController.text.isNotEmpty) {
 
-                if (_imageFile != null && token != null) {
-                  await context.read<TodoCubit>().uploadImage(_imageFile!, token);
+                  final newTask = TodoModel(
+                    title: titleController.text,
+                    desc: descriptionController.text,
+                    priority: selectedPriority,
+                    status: selectedStatus,
+                    dueDate: selectedDate != null
+                        ? '${selectedDate!.year}-${selectedDate!.month.toString().padLeft(2, '0')}-${selectedDate!.day.toString().padLeft(2, '0')}'
+                        : 'No date selected',
+                    image: _imageFile?.path ?? "defaultImage",
+                  );
+
+                  if (_imageFile != null) {
+                    try {
+                      await context.read<TodoCubit>().uploadImage(_imageFile!, token);
+                    } catch (e) {
+                      print("Error uploading image: $e");
+                    }
+                  }
+
+                  await context.read<TodoCubit>().addTask(newTask);
+                  Navigator.pushNamed(context, AppRoutes.home);
+                } else {
+                  print("Missing token or fields");
                 }
-
-                final task = TodoModel(
-                  title: titleController.text,
-                  desc: descriptionController.text,
-                  priority: selectedPriority,
-                  status: selectedStatus,
-                  dueDate: selectedDate != null
-                      ? '${selectedDate!.year}-${selectedDate!.month.toString().padLeft(2, '0')}-${selectedDate!.day.toString().padLeft(2, '0')}'
-                      : 'No date selected',
-                  image: _imageFile?.path ?? "defaultImage",
-                );
-
-                context.read<TodoCubit>().addTask(task);
-                Navigator.of(context).pop();
               }),
             ],
           ),

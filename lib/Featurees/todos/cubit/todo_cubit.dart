@@ -20,7 +20,8 @@ class TodoCubit extends Cubit<TodoState> {
       final tasks = await repository.getTasks();
       emit(TaskLoaded(tasks));
     } catch (e) {
-      emit(TaskError('Failed to load Tasks $e'));
+      print("Error fetching tasks: $e");
+      emit(TaskError('Failed to load Tasks: $e'));
     }
   }
 
@@ -31,6 +32,7 @@ class TodoCubit extends Cubit<TodoState> {
       uploadedImagePath = imagePath;
       emit(ImageUploadSuccess(imagePath));
     } catch (e) {
+      print("Error during image upload: $e");
       emit(ImageUploadError('فشل في رفع الصورة: $e'));
     }
   }
@@ -41,25 +43,26 @@ class TodoCubit extends Cubit<TodoState> {
       if (uploadedImagePath != null) {
         task = task.copyWith(image: uploadedImagePath);
       }
+      print("Adding task: $task");
       await repository.addTask(task);
       uploadedImagePath = null;
       emit(TaskAdded());
       getTasks();
     } catch (e) {
+      print("Error adding task: $e");
       emit(TaskError('فشل في إضافة المهمة: $e'));
     }
   }
-
 
   Future<void> editTask(String taskId, {String? title, String? desc, String? status, String? priority}) async {
     try {
       emit(TaskLoading());
       await repository.editTask(taskId, title: title, desc: desc, status: status, priority: priority);
-
       final updatedTask = await repository.getTaskById(taskId);
       emit(TaskUpdated(taskId: taskId, updatedTask: updatedTask));
     } catch (e) {
-      emit(TaskError('Failed to update task: $e'));
+      print("Error editing task: $e");
+      emit(TaskError('فشل في تحديث المهمة: $e'));
     }
   }
 
@@ -69,9 +72,8 @@ class TodoCubit extends Cubit<TodoState> {
       await repository.deleteTask(taskId);
       emit(TaskDeleted(taskId: taskId));
     } catch (e) {
+      print("Error deleting task: $e");
       emit(TaskError('فشل في حذف المهمة: $e'));
     }
   }
-
-
 }

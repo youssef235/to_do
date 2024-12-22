@@ -8,7 +8,7 @@ class TaskCard extends StatelessWidget {
   final Color backgroundColor;
   final Color textColor;
   final Color priorityColor;
-  final Function onDelete; // إضافة دالة الحذف
+  final Function onDelete;
 
   const TaskCard({
     required this.task,
@@ -16,7 +16,7 @@ class TaskCard extends StatelessWidget {
     required this.backgroundColor,
     required this.textColor,
     required this.priorityColor,
-    required this.onDelete, // تمرير دالة الحذف
+    required this.onDelete,
   });
 
   @override
@@ -86,11 +86,11 @@ class TaskCard extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8.0), // إضافة مساحة بين الحالة وزر القائمة
+                      const SizedBox(width: 8.0),
                       PopupMenuButton<String>(
                         onSelected: (value) {
                           if (value == 'delete') {
-                            onDelete(); // استدعاء دالة الحذف
+                            onDelete();
                           }
                         },
                         itemBuilder: (BuildContext context) {

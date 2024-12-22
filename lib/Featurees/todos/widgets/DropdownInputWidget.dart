@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
 import '../../../constants/colors.dart';
 
 class DropdownInputWidget extends StatelessWidget {
   final String value;
-  final List<Map<String, dynamic>> items; 
+  final List<Map<String, dynamic>> items;
   final Function(String?) onChanged;
   final String label;
 
@@ -31,7 +30,7 @@ class DropdownInputWidget extends StatelessWidget {
         ),
         const SizedBox(height: 5),
         DropdownButtonFormField<String>(
-          value: value,
+          value: value.isEmpty ? null : value,
           items: items.map((item) {
             return DropdownMenuItem<String>(
               value: item['value'],
@@ -43,7 +42,7 @@ class DropdownInputWidget extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    item['text'], // النص الكامل الذي يظهر للمستخدم.
+                    item['text'],
                     style: TextStyle(color: AppColors.primaryColor),
                   ),
                 ],
